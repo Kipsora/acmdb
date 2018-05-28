@@ -1,0 +1,31 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{epsfig}
+\usepackage{makecell}
+\usepackage{setspace}
+\usepackage{url}
+\usepackage[colorlinks=true,citecolor=blue,urlcolor=cyan,linkcolor=red]{hyperref}
+\usepackage[cache=false]{minted}
+\usepackage{geometry}
+
+\title{Database System Lab \texttt{\#}1 Report}
+\author{515030910647, Jiacheng Yang\\\texttt{kipsora@gmail.com}}
+
+\begin{document}
+    \maketitle
+    \section{Design Decisions}
+        In this project, the major designable parts are how to handle queries quickly in \texttt{Catalog} and how to evict pages when the buffer is full. In my implementations, two maps called \texttt{mapByTableID} and \texttt{mapByTableName} were used to index table id and table name to the table object, respectively. And then all of the queries can be done within $\mathcal{O}(\log n)$ where $n$ is the number of tables. And for the policy of eviction of pages, Least Frequently Used policy is used in my implementation. Other parts are trivial by referring the docs in the comments and the tutorials on the lab's website.
+
+    \section{API Adaptations}
+        Currently a class called \texttt{Table} is added for the sake of simplicity in writing codes which can just be regarded as a tuple of \texttt{Database File}, \texttt{Table Name} and \texttt{Table Primary Key}.
+
+    \section{Missing or Incomplete Elements}
+        Currently for Lab 1 I've implemented all of the required parts. And all of the incomplete/remained elements will be completed in future labs.
+
+    \section{Time \& Problems}
+        Approximately 6 hours is spent on this project including building environment and reading documentations. And during the process of completing this lab, the most confusing/complicated part is handling with Java files where personally speaking, I have no related experience on that part. Besides, there is little references/documentations for the usage of \texttt{header}, which means the format of \texttt{header} is not clear (at least as a documentation it is not so clear for me).
+\end{document}
