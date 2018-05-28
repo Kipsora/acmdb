@@ -263,7 +263,8 @@ public class LogFile {
             int numIdArgs = raf.readInt();
             Object idArgs[] = new Object[numIdArgs];
             for (int i = 0; i < numIdArgs; i++) {
-                idArgs[i] = new Integer(raf.readInt());
+//                idArgs[i] = new Integer(raf.readInt());
+                idArgs[i] = raf.readInt();
             }
             pid = (PageId) idConsts[0].newInstance(idArgs);
 

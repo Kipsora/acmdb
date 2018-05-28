@@ -1,10 +1,7 @@
 package simpledb;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * BufferPool manages the reading and writing of pages into memory from
@@ -32,6 +29,8 @@ public class BufferPool {
 
     private int numPages;
     private Map<PageId, Page> pageMap;
+    private PriorityQueue<PageId> queue;
+    private Map<PageId, Integer> pageCount;
 
     /**
      * Creates a BufferPool that caches up to numPages pages.
@@ -42,6 +41,18 @@ public class BufferPool {
         // some code goes here
         this.numPages = numPages;
         this.pageMap = new HashMap<>();
+        this.pageCount = new HashMap<>();
+        this.queue = new PriorityQueue<>((o1, o2) -> {
+            int count1 = pageCount.get(o1);
+            int count2 = pageCount.get(o2);
+            if (count1 < count2) {
+                return -1;
+            } else if (count1 == count2) {
+                return o1.hashCode() - o2.hashCode();
+            } else {
+                return 1;
+            }
+        });
     }
 
     public static int getPageSize() {
@@ -74,32 +85,31 @@ public class BufferPool {
      * @param perm the requested permissions on the page
      */
     public Page getPage(TransactionId tid, PageId pid, Permissions perm)
-            throws TransactionAbortedException, DbException {
+            throws DbException {
         // some code goes here
         if (pageMap.containsKey(pid)) {
+            Integer oldCount = pageCount.get(pid);
+            queue.remove(pid);
+            pageCount.put(pid, oldCount + 1);
+            queue.add(pid);
             return pageMap.get(pid);
         } else {
-
             // Read the pages in the file
             Catalog catalog = Database.getCatalog();
-            Page page = null;
-            for (Iterator<Integer> it = catalog.tableIdIterator(); it.hasNext(); ) {
-                int i = it.next();
-                if (i == pid.getTableId()) {
-                    DbFile dbFile = catalog.getDatabaseFile(i);
-                    page = dbFile.readPage(pid);
-                    break;
-                }
-            }
-            if (page == null) {
-                throw new DbException("Cannot load specific page on disk");
+            Page page;
+            try {
+                page = catalog.getDatabaseFile(pid.getTableId()).readPage(pid);
+            } catch (NoSuchElementException e) {
+                throw new DbException("No such page");
             }
             while (pageMap.size() >= numPages) {
-                int evictedPageIndex = pageMap.size() % numPages;
-                ArrayList<PageId> tmp = new ArrayList<>(pageMap.keySet());
-                pageMap.remove(tmp.get(evictedPageIndex));
+                PageId evictedPageId = queue.poll();
+                pageCount.remove(evictedPageId);
+                pageMap.remove(evictedPageId);
             }
             pageMap.put(pid, page);
+            pageCount.put(pid, 1);
+            queue.add(pid);
             return page;
         }
     }
