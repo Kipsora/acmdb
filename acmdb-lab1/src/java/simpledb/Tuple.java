@@ -87,7 +87,16 @@ public class Tuple implements Serializable {
      */
     public String toString() {
         // some code goes here
-        throw new UnsupportedOperationException("Implement this");
+        StringBuilder builder = new StringBuilder();
+        boolean first = true;
+        for (Field e: fields) {
+            if (!first) {
+                builder.append('\t');
+            }
+            first = false;
+            builder.append(e.toString());
+        }
+        return builder.toString();
     }
 
     /**
