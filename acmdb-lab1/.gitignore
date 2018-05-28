@@ -5,3 +5,7 @@ dist
 log
 examples
 .DS_Store
+report/answer.*
+!report/answer.tex
+build.xml
+
