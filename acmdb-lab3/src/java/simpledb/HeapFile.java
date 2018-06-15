@@ -29,7 +29,7 @@ public class HeapFile implements DbFile {
         private int pageIndex;
         private Iterator<Tuple> tupleIterator;
 
-        public HeapFileIterator(HeapFile f) {
+        public HeapFileIterator(HeapFile f, TransactionId tid) {
             this.file = f;
             this.tid = tid;
         }
@@ -210,7 +210,7 @@ public class HeapFile implements DbFile {
     // see DbFile.java for javadocs
     public DbFileIterator iterator(TransactionId tid) {
         // some code goes here
-        return new HeapFileIterator(this);
+        return new HeapFileIterator(this, tid);
     }
 
 }

@@ -170,7 +170,6 @@ public class BufferPool {
             List<Page> pages = Database.getCatalog().getDatabaseFile(tableId).insertTuple(tid, t);
             for (Page page: pages) {
                 page.markDirty(true, tid);
-                getPage(tid, page.getId(), Permissions.READ_ONLY);
                 putPageToCache(page.getId(), page);
             }
         } catch (DbException | IOException | TransactionAbortedException e) {

@@ -44,15 +44,7 @@ public class JoinPredicate implements Serializable {
      */
     public boolean filter(Tuple tA, Tuple tB) {
         // some code goes here
-        for (Iterator<Field> itA = tA.fields(); itA.hasNext(); ) {
-            Field currentField = itA.next();
-            for (Iterator<Field> itB = tB.fields(); itB.hasNext(); ) {
-                if (currentField.compare(op, itB.next())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return tA.getField(field1).compare(op, tB.getField(field2));
     }
     
     public int getField1() {
