@@ -1,0 +1,31 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{epsfig}
+\usepackage{makecell}
+\usepackage{setspace}
+\usepackage{url}
+\usepackage[colorlinks=true,citecolor=blue,urlcolor=cyan,linkcolor=red]{hyperref}
+\usepackage[cache=false]{minted}
+\usepackage{geometry}
+
+\title{Database System Lab \texttt{\#}2 Report}
+\author{515030910647, Jiacheng Yang\\\texttt{kipsora@gmail.com}}
+
+\begin{document}
+    \maketitle
+    \section{Design Decisions}
+        In this project, I've made several decisions. For example, I've used iterator-like return, like \texttt{yield} in python, to return the required values in all operators if possible. Besides, in the part of implementing aggregators, I've tried to reduce the using memory as small as possible without loss of the beauty of my codes.
+
+    \section{API Adaptations}
+    	In this lab, all of the adaptations is nothing but some utility functions which is used to make the logic of my codes more clear.
+
+    \section{Missing or Incomplete Elements}
+        Currently for Lab 3 I've implemented all of the required parts. And all of the incomplete/remained elements will be completed in future labs.
+
+    \section{Time \& Problems}
+        Approximately 5 hours is spent on this lab including building environment and reading documentations. And during the process of completing this lab, the most confusing/complicated part is to implement the remaining parts of \texttt{BufferPool}. And there also some bugs in the test code, for instance, the \texttt{iterator.close()} is called twice in system test point \texttt{JoinTest}.
+\end{document}
