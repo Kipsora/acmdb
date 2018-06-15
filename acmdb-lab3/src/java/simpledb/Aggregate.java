@@ -39,9 +39,14 @@ public class Aggregate extends Operator {
         this.groupByField = gfield;
         this.op = aop;
         if (gfield == Aggregator.NO_GROUPING) {
-            this.tupleDesc = new TupleDesc(new Type[]{Type.INT_TYPE});
+            this.tupleDesc = new TupleDesc(
+                    new Type[]{Type.INT_TYPE},
+                    new String[]{aop.toString() + '(' + child.getTupleDesc().getFieldName(afield) + ')'});
         } else {
-            this.tupleDesc = new TupleDesc(new Type[]{child.getTupleDesc().getFieldType(gfield), Type.INT_TYPE});
+            this.tupleDesc = new TupleDesc(
+                    new Type[]{child.getTupleDesc().getFieldType(gfield), Type.INT_TYPE},
+                    new String[]{child.getTupleDesc().getFieldName(gfield),
+                            aop.toString() + '(' + child.getTupleDesc().getFieldName(afield) + ')'});
         }
     }
 
